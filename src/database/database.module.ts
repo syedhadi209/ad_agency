@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
+import { Brand } from './entities/brand.entity';
+import { Campaign } from './entities/campaign.entity';
 
 dotenv.config();
 
@@ -13,7 +15,7 @@ dotenv.config();
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+      entities: [Brand, Campaign],
       synchronize: true,
     }),
   ],
