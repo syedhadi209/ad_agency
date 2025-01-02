@@ -1,85 +1,299 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Ad Campaign Management System
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Table of Contents
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+1. [Overview](#overview)
+2. [Project Setup](#project-setup)
+3. [Database Setup](#database-setup)
+4. [Project Structure](#project-structure)
+5. [Controllers & Endpoints](#controllers-endpoints)
+6. [Cron Jobs](#cron-jobs)
+7. [Running the Application](#running-the-application)
+8. [Contributing](#contributing)
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Overview
 
-## Project setup
+This system manages advertising campaigns for multiple brands, each with its own daily and monthly budget. The system ensures that:
 
-```bash
-$ yarn install
-```
+- Campaigns are activated/deactivated based on the brand's daily and monthly budgets.
+- Campaigns respect specific time-based constraints (dayparting).
+- Daily and monthly budgets are reset at the start of each day and month.
+- Automated cron jobs handle all of the above logic without manual intervention.
 
-## Compile and run the project
+### Key Features:
 
-```bash
-# development
-$ yarn run start
+- **Brand Management**: Create and manage brands with their daily and monthly budgets.
+- **Campaign Management**: Create campaigns, set dayparting hours, and activate/deactivate campaigns based on budget and time.
+- **Budget Management**: Monitor daily and monthly spending.
+- **Automatic Resets**: Daily and monthly budget resets.
+- **Cron Jobs**: Automate the logic for budget resets, campaign activation, and dayparting.
 
-# watch mode
-$ yarn run start:dev
+---
 
-# production mode
-$ yarn run start:prod
-```
+## Project Setup
 
-## Run tests
+### 1. Clone the repository
 
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+git clone https://github.com/syedhadi209/ad_agency.git
+cd ad_agency
 ```
 
-## Resources
+### 2. Install Dependencies using Yarn
 
-Check out a few resources that may come in handy when working with NestJS:
+```bash
+yarn install
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+This installs the necessary dependencies including NestJS, TypeORM, and other required packages.
 
-## Support
+---
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Database Setup
 
-## Stay in touch
+### 1. Install PostgreSQL
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Install PostgreSQL on your local machine or use a cloud PostgreSQL service (e.g., AWS RDS, Heroku Postgres).
+- Make sure to create a database for the project.
 
-## License
+### 2. Database Configuration
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+In your `.env` file, add the following environment variables:
+
+```dotenv
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=your-db-username
+DB_PASSWORD=your-db-password
+DB_NAME=ad_campaign_db
+PORT=3000
+```
+
+### 3. Entities & Migration
+
+The `Brand` and `Campaign` entities are defined in `src/database/entities/`. Ensure that your database is connected and the tables are created. You can also run the migrations with TypeORM if necessary.
+
+---
+
+## Project Structure
+
+```
+ad-campaign-management/
+├── src/
+│   ├── app.module.ts          # Main module for the application
+│   ├── database/
+│   │   ├── entities/          # Database entities (Brand, Campaign)
+│   │   └── database.module.ts # Database module
+│   ├── brand/
+│   │   ├── brand.controller.ts
+│   │   ├── brand.service.ts
+│   │   └── brand.module.ts
+│   ├── campaign/
+│   ├── └── campaign_dto/
+│   │       └─ index.ts
+│   │   ├── campaign.controller.ts
+│   │   ├── campaign.service.ts
+│   │   ├── campaign-cron.service.ts # Cron job for dayparting
+│   │   └── campaign.module.ts
+│   ├── cron-jobs/
+│   │   └── cron.service.ts   # Cron job scheduler for resets
+│   └── main.ts               # Entry point for the application
+├── .env                       # Environment variables
+├── package.json               # Package configuration (with Yarn)
+└── yarn.lock                  # Yarn lock file
+```
+
+---
+
+## Controllers & Endpoints
+
+### Brand Controller
+
+#### 1. Create a Brand
+
+- **Endpoint**: `POST /brands`
+- **Request Body**:
+
+```json
+{
+  "name": "Brand Name",
+  "dailyBudget": 1000,
+  "monthlyBudget": 30000
+}
+```
+
+- **Response**:
+
+```json
+{
+  "id": 1,
+  "name": "Brand Name",
+  "dailyBudget": 1000,
+  "monthlyBudget": 30000,
+  "dailySpend": 0,
+  "monthlySpend": 0,
+  "lastReset": "2023-12-01T00:00:00.000Z"
+}
+```
+
+#### 2. Get All Brands
+
+- **Endpoint**: `GET /brands`
+- **Response**:
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Brand Name",
+    "dailyBudget": 1000,
+    "monthlyBudget": 30000,
+    "dailySpend": 0,
+    "monthlySpend": 0,
+    "lastReset": "2023-12-01T00:00:00.000Z"
+  }
+]
+```
+
+#### 3. Update Brand's Budget
+
+- **Endpoint**: `PATCH /brands/:id/budget`
+- **Request Body**:
+
+```json
+{
+  "dailyBudget": 1200,
+  "monthlyBudget": 35000
+}
+```
+
+- **Response**:
+
+```json
+{
+  "id": 1,
+  "name": "Brand Name",
+  "dailyBudget": 1200,
+  "monthlyBudget": 35000,
+  "dailySpend": 0,
+  "monthlySpend": 0,
+  "lastReset": "2023-12-01T00:00:00.000Z"
+}
+```
+
+---
+
+### Campaign Controller
+
+#### 1. Create a Campaign
+
+- **Endpoint**: `POST /campaigns`
+- **Request Body**:
+
+```json
+{
+  "name": "Campaign Name",
+  "brandId": 1,
+  "activeHours": [9, 10, 11]
+}
+```
+
+- **Response**:
+
+```json
+{
+  "id": 1,
+  "name": "Campaign Name",
+  "brandId": 1,
+  "activeHours": [9, 10, 11],
+  "isActive": true
+}
+```
+
+#### 2. Get All Campaigns
+
+- **Endpoint**: `GET /campaigns`
+- **Response**:
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Campaign Name",
+    "brandId": 1,
+    "activeHours": [9, 10, 11],
+    "isActive": true
+  }
+]
+```
+
+#### 3. Update Campaign Status (Activate/Deactivate)
+
+- **Endpoint**: `PATCH /campaigns/:id/status`
+- **Request Body**:
+
+```json
+{
+  "isActive": false
+}
+```
+
+- **Response**:
+
+```json
+{
+  "id": 1,
+  "name": "Campaign Name",
+  "brandId": 1,
+  "activeHours": [9, 10, 11],
+  "isActive": false
+}
+```
+
+---
+
+## Cron Jobs
+
+The cron jobs are set to run automatically based on the time intervals defined in the `src/cron-jobs/cron.service.ts` file.
+
+### Daily Reset Cron Job
+
+- **Cron Expression**: `0 0 * * *`
+- **Trigger**: Runs daily at midnight to reset the daily spend for all brands and reactivate campaigns if the daily budget has not been reached.
+
+### Monthly Reset Cron Job
+
+- **Cron Expression**: `0 0 1 * *`
+- **Trigger**: Runs on the first day of every month to reset the monthly spend for all brands and reactivate campaigns if the monthly budget has not been reached.
+
+---
+
+## Running the Application
+
+1. **Start the Application**:
+
+```bash
+yarn start
+```
+
+This starts the NestJS application and listens on the port defined in the `.env` file (default `3000`).
+
+2. **Access the Application**:
+
+Open your browser and navigate to `http://localhost:3000`.
+
+---
+
+## Contributing
+
+1. Fork the repository.
+2. Create your feature branch (`git checkout -b feature-branch`).
+3. Commit your changes (`git commit -am 'Add new feature'`).
+4. Push to the branch (`git push origin feature-branch`).
+5. Open a pull request.
+
+---
+
+This document outlines the basic setup and flow of the Ad Campaign Management System. Please feel free to modify or extend it according to your specific needs!
